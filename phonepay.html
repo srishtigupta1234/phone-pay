@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhonePe Payment Mimic</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .hidden {
+      display: none;
+    }
+    .processing {
+      font-size: 24px;
+      color: #555;
+    }
+    .success {
+      color: #28a745;
+      font-size: 24px;
+    }
+    .failure {
+      color: #dc3545;
+      font-size: 24px;
+    }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #1e88e5;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="processing" class="hidden">
+      <div class="spinner"></div>
+      <p class="processing">Processing Payment...</p>
+    </div>
+    <div id="success" class="hidden">
+      <p class="success">🎉 Payment Successful!</p>
+    </div>
+    <div id="failure" class="hidden" >
+      <p class="failure">❌ Payment Failed!</p>
+    </div>
+    <button id="payButton">Pay Now</button>
+  </div>
+
+  <script>
+      const btn = document.getElementById("payButton")
+      const success = document.getElementById("success")
+      const failure = document.getElementById("failure")
+      const process = document.getElementById("processing")
+
+      function stimulatePayment(){
+        return new Promise((res,rej)=>{
+            setTimeout(() => {
+                Math.random()>0.5 ? res():rej();
+            }, 2000);
+        })
+      }
+      btn.addEventListener('click',()=>{
+         process.classList.remove('hidden');
+         success.classList.add('hidden');
+         failure.classList.add('hidden');
+         btn.disabled = true;
+         stimulatePayment().then(()=>{
+            process.classList.add('hidden');
+            success.classList.remove('hidden');
+         }).catch(()=>{
+            process.classList.add('hidden');
+            failure.classList.remove('hidden');
+         }) .finally(() => {
+          payButton.disabled = false;
+        });
+      })
+  </script>
+</body>
+</html>
